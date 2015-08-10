@@ -124,9 +124,9 @@ class Players(tag: Tag) extends Table[Player](tag, "players") {
 
   def nowCost = column[Int]("nowCost")
 
-  def chanceOfPlayingThisRound = column[Int]("chanceOfPlayingThisRound")
+  def chanceOfPlayingThisRound = column[Int]("chanceOfPlayingThisRound", O.Nullable)
 
-  def chanceOfPlayingNextRound = column[Int]("chanceOfPlayingNextRound")
+  def chanceOfPlayingNextRound = column[Int]("chanceOfPlayingNextRound", O.Nullable)
 
   def valueForm = column[BigDecimal]("valueForm")
 
@@ -168,7 +168,7 @@ class Players(tag: Tag) extends Table[Player](tag, "players") {
 
   def pointsPerGame = column[BigDecimal]("pointsPerGame")
 
-  def epThis = column[BigDecimal]("epThis")
+  def epThis = column[BigDecimal]("epThis", O.Nullable)
 
   def epNext = column[BigDecimal]("epNext")
 

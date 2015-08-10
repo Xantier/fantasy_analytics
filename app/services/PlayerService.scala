@@ -91,7 +91,8 @@ object PlayerService {
   def fetch = Action.async {
     WS.url("http://fantasy.premierleague.com/web/api/elements/2/").get().map { res =>
       val player = construct(res)
-      val eventualInt: Future[Int] = PlayerDAO.insert(player)
+      val savedPlayer: Option[Player] = PlayerDAO.insert(player)
+      println(savedPlayer)
       Result(
         header = ResponseHeader(200, Map("Content-Type" -> "text/plain")),
         body = Enumerator(res.body.getBytes)
