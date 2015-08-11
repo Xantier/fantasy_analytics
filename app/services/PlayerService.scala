@@ -1,10 +1,11 @@
 package services
 
 import models._
+import play.api.Play.current
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.ws._
 import play.api.mvc.{Action, ResponseHeader, Result}
-import play.api.Play.current
+
 import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.Future
 
@@ -47,12 +48,12 @@ object PlayerService {
       playerInfo = PlayerInfo(
         (res.json \ "web_name").toString,
         (res.json \ "first_name").toString,
-        (res.json \ "second_name"). toString,
-        (res.json \ "type_name"). toString,
-        (res.json \ "team_name"). toString,
-        (res.json \ "news"). toString,
-        (res.json \ "status"). toString,
-        (res.json \ "photo"). toString,
+        (res.json \ "second_name").toString,
+        (res.json \ "type_name").toString,
+        (res.json \ "team_name").toString,
+        (res.json \ "news").toString,
+        (res.json \ "status").toString,
+        (res.json \ "photo").toString,
         (res.json \ "team_code").as[Int],
         (res.json \ "team_id").as[Int],
         (res.json \ "team").as[Int]
@@ -88,23 +89,24 @@ object PlayerService {
 
   }
 
-  def fetch = Action.async {
-    WS.url("http://fantasy.premierleague.com/web/api/elements/2/").get().map { res =>
-      val player = construct(res)
-      val savedPlayer: Option[Player] = PlayerDAO.insert(player)
-      println(savedPlayer)
-      Result(
-        header = ResponseHeader(200, Map("Content-Type" -> "text/plain")),
-        body = Enumerator(res.body.getBytes)
-      )
+  def fetch = Action {
+    mine(99)
+    Result(
+      header = ResponseHeader(200, Map("Content-Type" -> "text/plain")),
+      body = Enumerator("Doing stuff".getBytes)
+    )
+  }
+
+
+  def mine(x: Int): Int = {
+    x match {
+      case 0 => 0
+      case _ =>
+        WS.url("http://fantasy.premierleague.com/web/api/elements/" + x + "/").get().map { res =>
+          val player = construct(res)
+          PlayerDAO.insert(player)
+        }
+        mine(x - 1)
     }
   }
-
-
-  def mine(id: Int): Boolean = {
-
-    true
-  }
-
-
 }
