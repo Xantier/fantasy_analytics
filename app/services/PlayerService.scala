@@ -46,14 +46,14 @@ object PlayerService {
         (res.json \ "dreamteam_count").as[Int]
       ),
       playerInfo = PlayerInfo(
-        (res.json \ "web_name").toString,
-        (res.json \ "first_name").toString,
-        (res.json \ "second_name").toString,
-        (res.json \ "type_name").toString,
-        (res.json \ "team_name").toString,
-        (res.json \ "news").toString,
-        (res.json \ "status").toString,
-        (res.json \ "photo").toString,
+        (res.json \ "web_name").as[String],
+        (res.json \ "first_name").as[String],
+        (res.json \ "second_name").as[String],
+        (res.json \ "type_name").as[String],
+        (res.json \ "team_name").as[String],
+        (res.json \ "news").as[String],
+        (res.json \ "status").as[String],
+        (res.json \ "photo").as[String],
         (res.json \ "team_code").as[Int],
         (res.json \ "team_id").as[Int],
         (res.json \ "team").as[Int]
@@ -72,8 +72,8 @@ object PlayerService {
         (res.json \ "ep_this").asOpt[BigDecimal],
         (res.json \ "ep_next").as[BigDecimal],
         (res.json \ "event_total").as[Int],
-        (res.json \ "current_fixture").toString,
-        (res.json \ "next_fixture").toString,
+        (res.json \ "current_fixture").as[String],
+        (res.json \ "next_fixture").as[String],
         (res.json \ "in_dreamteam").as[Boolean]
       ),
       other = Other(
@@ -90,17 +90,16 @@ object PlayerService {
   }
 
   def fetch = Action {
-    mine(99)
-    Result(
-      header = ResponseHeader(200, Map("Content-Type" -> "text/plain")),
-      body = Enumerator("Doing stuff".getBytes)
-    )
+    mine(552)
   }
 
 
-  def mine(x: Int): Int = {
+  def mine(x: Int): Result = {
     x match {
-      case 0 => 0
+      case 0 => Result(
+        header = ResponseHeader(200, Map("Content-Type" -> "text/plain")),
+        body = Enumerator("All Players retrieved".getBytes)
+      )
       case _ =>
         WS.url("http://fantasy.premierleague.com/web/api/elements/" + x + "/").get().map { res =>
           val player = construct(res)
