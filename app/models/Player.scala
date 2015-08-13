@@ -33,7 +33,8 @@ case class EventInfo(
   eventTotal: Int,
   currentFixture: String,
   nextFixture: String,
-  inDreamteam: Boolean
+  inDreamteam: Boolean,
+  gameweek: Int
 )
 
 case class Value(
@@ -166,6 +167,8 @@ class Players(tag: Tag) extends Table[Player](tag, "players") {
 
   def eventPoints = column[Int]("eventPoints")
 
+  def gameweek = column[Int]("gameweek")
+
   def pointsPerGame = column[BigDecimal]("pointsPerGame")
 
   def epThis = column[BigDecimal]("epThis", O.Nullable)
@@ -216,7 +219,7 @@ class Players(tag: Tag) extends Table[Player](tag, "players") {
 
   def value = (nowCost, valueForm, valueSeason, costChangeStart, costChangeEvent, costChangeStartFall, costChangeEventFall) <> (Value.tupled, Value.unapply)
 
-  def eventInfo = (eventPoints, epThis.?, epNext, eventTotal, currentFixture, nextFixture, inDreamteam) <> (EventInfo.tupled, EventInfo.unapply)
+  def eventInfo = (eventPoints, epThis.?, epNext, eventTotal, currentFixture, nextFixture, inDreamteam, gameweek) <> (EventInfo.tupled, EventInfo.unapply)
 
   def other = (selectedByPercent, form, special, eaIndex, bps, elementType) <> (Other.tupled, Other.unapply)
 }

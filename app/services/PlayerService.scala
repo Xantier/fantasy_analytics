@@ -7,7 +7,6 @@ import play.api.libs.ws._
 import play.api.mvc.{Action, ResponseHeader, Result}
 
 import scala.concurrent.ExecutionContext.Implicits._
-import scala.concurrent.Future
 
 object PlayerService {
 
@@ -74,7 +73,8 @@ object PlayerService {
         (res.json \ "event_total").as[Int],
         (res.json \ "current_fixture").as[String],
         (res.json \ "next_fixture").as[String],
-        (res.json \ "in_dreamteam").as[Boolean]
+        (res.json \ "in_dreamteam").as[Boolean],
+        1 // Gameweek
       ),
       other = Other(
         (res.json \ "selected_by_percent").as[BigDecimal],
