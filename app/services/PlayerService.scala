@@ -9,6 +9,10 @@ import play.api.mvc.{Action, ResponseHeader, Result}
 import scala.concurrent.ExecutionContext.Implicits._
 
 object PlayerService {
+  def load(name: String) : Player = {
+    PlayerDAO.load(name)
+  }
+
 
   def construct(res: WSResponse): Player = {
 

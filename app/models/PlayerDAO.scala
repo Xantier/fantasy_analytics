@@ -5,12 +5,18 @@ import play.api.db.DB
 import slick.driver.PostgresDriver.api._
 
 import scala.concurrent.duration.Duration
-import scala.concurrent.Await
+import scala.concurrent.{Future, Await}
 
 object PlayerDAO {
   val players = TableQuery[Players]
 
   private def db: Database = Database.forDataSource(DB.getDataSource())
+
+  def load(name: String): Player = {
+    val q: Query[Players, Players#TableElementType, Seq] = players.filter(_.shortName === name)
+    val action = q.result.headOption
+    db.run(action)
+  }
 
   def insert(player: Player): Option[Player] = {
     val isCompleted = {
